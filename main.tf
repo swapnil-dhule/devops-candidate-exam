@@ -26,8 +26,8 @@ resource "aws_route_table_association" "private_route_table_association" {
 #   output_path = "${path.module}/function.zip"
 # }
 
-resource "aws_lambda_function" "example_lambda" {
-  function_name = "example_lambda_function"
+resource "aws_lambda_function" "swapnil_lambda" {
+  function_name = "lambda_function"
   handler = "main.handler"
   runtime = "python3.9"
   role = data.aws_iam_role.lambda.arn
