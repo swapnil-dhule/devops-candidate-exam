@@ -39,7 +39,8 @@ resource "aws_lambda_function" "example_lambda" {
   role = data.aws_iam_role.lambda.arn
   filename = "lambda_function.zip"
 
-  vpc_config {
-    subnet_ids = [aws_subnet.private_subnet.id]
-  }
+#   vpc_config {
+#     subnet_ids = [aws_subnet.private_subnet.id]
+#     security_group_ids = [aws_security_group.lambda_security_group.id]
+#   }
 }
