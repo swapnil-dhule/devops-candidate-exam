@@ -13,6 +13,12 @@ pipeline{
                 sh "terraform validate"
             }
         }
+        stage("TF Destroy"){
+            steps{
+                echo "Executing Terraform Destroy"
+                sh "terraform destroy -auto-approve"
+            }
+        }        
         stage("TF Plan"){
             steps{
                 echo "Executing Terraform Plan"
