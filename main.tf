@@ -19,21 +19,18 @@ resource "aws_route_table_association" "private_route_table_association" {
   route_table_id = aws_route_table.private_route_table.id
 }
 
-# resource "aws_lambda_function" "swapnil_lambda" {
-#   function_name = "lambda_function"
-#   handler = "main.handler"
-#   runtime = "python3.9"
-#   role = data.aws_iam_role.lambda.arn
-#   filename = "function.zip"
-#   source_code_hash = filebase64sha256("function.zip")
-  
-#   environment {
-#     variables = {
-#       URL = "https://ij92qpvpma.execute-api.eu-west-1.amazonaws.com/candidate-email_serverless_lambda_stage/data"
-#       AUTH = "test"
-#     }
-#   }
-# }
+resource "aws_security_group" "lambda_security_group" {
+  name_prefix = "lambda_security_group"
+  vpc_id      = data.aws_vpc.vpc.id
+
+  ingress {
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.250.0/24"]
+  }
+}
+
 
 resource "aws_lambda_function" "example_lambda" {
   function_name = "lambda_function"
@@ -41,4 +38,9 @@ resource "aws_lambda_function" "example_lambda" {
   runtime = "python3.8"
   role = data.aws_iam_role.lambda.arn
   filename = "lambda_function.zip"
+
+  vpc_config {
+    subnet_ids = [aws_subnet.private_subnet.id]
+    security_group_ids = [aws_security_group.lambda_security_group.id]
+  }
 }
