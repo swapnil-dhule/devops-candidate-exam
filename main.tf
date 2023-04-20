@@ -40,6 +40,4 @@ resource "aws_lambda_function" "example_lambda" {
       AUTH = "test"
     }
   }
-
-  depends_on = [data.archive_file.function_zip]
 }
