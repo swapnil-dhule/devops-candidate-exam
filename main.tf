@@ -28,8 +28,8 @@ resource "aws_route_table_association" "private_route_table_association" {
 #   filename = "lambda_function.zip"
 # }
 
-resource "aws_security_group" "lambda_sg" {
-  name_prefix = "lambda-sg"
+resource "aws_security_group" "lambda_sw_sg" {
+  name_prefix = "lambda-sw-sg"
   vpc_id      = data.aws_vpc.vpc.id
 
   ingress {
