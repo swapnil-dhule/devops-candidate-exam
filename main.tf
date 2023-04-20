@@ -19,7 +19,6 @@ resource "aws_route_table_association" "private_route_table_association" {
   route_table_id = aws_route_table.private_route_table.id
 }
 
-
 resource "aws_lambda_function" "lambda" {
   function_name = "lambda_function"
   handler = "lambda_function.lambda_handler"
