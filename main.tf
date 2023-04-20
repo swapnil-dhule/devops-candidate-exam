@@ -39,5 +39,6 @@ resource "aws_lambda_function" "example_lambda" {
   function_name = "lambda_function"
   handler = "lambda_function.lambda_handler"
   runtime = "python3.8"
+  role = data.aws_iam_role.lambda.arn
   filename = "lambda_function.zip"
 }
