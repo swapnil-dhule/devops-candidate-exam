@@ -32,7 +32,7 @@ resource "aws_route_table_association" "private_route_table_association" {
 # }
 
 
-resource "aws_lambda_function" "example_lambda" {
+resource "aws_lambda_function" "lambda" {
   function_name = "lambda_function"
   handler = "lambda_function.lambda_handler"
   runtime = "python3.8"
