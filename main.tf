@@ -20,11 +20,11 @@ resource "aws_route_table_association" "private_route_table_association" {
 }
 
 
-data "archive_file" "function_zip" {
-  type        = "zip"
-  source_file = "main.py"
-  output_path = "${path.module}/function.zip"
-}
+# data "archive_file" "function_zip" {
+#   type        = "zip"
+#   source_file = "main.py"
+#   output_path = "${path.module}/function.zip"
+# }
 
 resource "aws_lambda_function" "example_lambda" {
   function_name = "example_lambda_function"
