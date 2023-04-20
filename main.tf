@@ -16,9 +16,5 @@ resource "aws_subnet" "private_subnet" {
   vpc_id            = data.aws_vpc.vpc.id
   availability_zone = "ap-south-1a"
   
-  cidr_block = cidrsubnet(data.aws_vpc.vpc.cidr_block, 8, 1)
-
-  tags = {
-    Name = "private-subnet"
-  }
+  cidr_block = "10.0.250.0/24"
 }
