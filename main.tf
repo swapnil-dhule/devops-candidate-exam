@@ -1,7 +1,7 @@
 resource "aws_subnet" "private_subnet" {
   cidr_block        = "10.0.1.0/24"
   vpc_id            = data.aws_vpc.vpc.id
-  availability_zone = "us-west-2a"
+  availability_zone = "ap-south-1a"
 }
 
 resource "aws_route_table" "private_route_table" {
