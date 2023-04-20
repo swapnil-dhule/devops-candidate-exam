@@ -19,18 +19,28 @@ resource "aws_route_table_association" "private_route_table_association" {
   route_table_id = aws_route_table.private_route_table.id
 }
 
-# resource "aws_security_group" "lambda_security_group" {
-#   name_prefix = "lambda_security_group"
-#   vpc_id      = data.aws_vpc.vpc.id
 
-#   ingress {
-#     from_port   = 0
-#     to_port     = 65535
-#     protocol    = "tcp"
-#     cidr_blocks = ["10.0.250.0/24"]
-#   }
+# resource "aws_lambda_function" "lambda" {
+#   function_name = "lambda_function"
+#   handler = "lambda_function.lambda_handler"
+#   runtime = "python3.8"
+#   role = data.aws_iam_role.lambda.arn
+#   filename = "lambda_function.zip"
 # }
 
+resource "aws_security_group" "lambda_sg" {
+  name_prefix = "lambda-sg"
+  vpc_id      = data.aws_vpc.vpc.id
+
+  ingress {
+    from_port = 0
+    to_port   = 65535
+    protocol  = "tcp"
+    cidr_blocks = [
+      aws_subnet.private_subnet.cidr_block,
+    ]
+  }
+}
 
 resource "aws_lambda_function" "lambda" {
   function_name = "lambda_function"
@@ -39,8 +49,13 @@ resource "aws_lambda_function" "lambda" {
   role = data.aws_iam_role.lambda.arn
   filename = "lambda_function.zip"
 
-#   vpc_config {
-#     subnet_ids = [aws_subnet.private_subnet.id]
-#     security_group_ids = [aws_security_group.lambda_security_group.id]
-#   }
+  vpc_config {
+    subnet_ids = [
+      aws_subnet.private_subnet.id,
+    ]
+
+    security_group_ids = [
+      aws_security_group.lambda_sg.id,
+    ]
+  }
 }
