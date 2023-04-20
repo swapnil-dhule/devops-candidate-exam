@@ -29,34 +29,34 @@ resource "aws_lambda_function" "lambda" {
   filename     = "${path.module}/lambda_function.zip"
 }
 
-data "archive_file" "lambda" {
-  type        = "zip"
-  output_path = "${path.module}/lambda_function.zip"
-  source {
-    content  = <<-EOF
-        import requests
-        import base64
+# data "archive_file" "lambda" {
+#   type        = "zip"
+#   output_path = "${path.module}/lambda_function_new.zip"
+#   source {
+#     content  = <<-EOF
+#         import requests
+#         import base64
 
-        def lambda_handler(event, context):
-            url = "https://ij92qpvpma.execute-api.eu-west-1.amazonaws.com/candidate-email_serverless_lambda_stage/data"
-            headers = {"X-Siemens-Auth": "test"}
-            payload = {
-                "subnet_id": "10.0.250.0/24",
-                "name": "Swapnil_Dhule",
-                "email": "swapneel.dhule@gmail.com"
-            }
+#         def lambda_handler(event, context):
+#             url = "https://ij92qpvpma.execute-api.eu-west-1.amazonaws.com/candidate-email_serverless_lambda_stage/data"
+#             headers = {"X-Siemens-Auth": "test"}
+#             payload = {
+#                 "subnet_id": "10.0.250.0/24",
+#                 "name": "Swapnil_Dhule",
+#                 "email": "swapneel.dhule@gmail.com"
+#             }
 
-            response = requests.post(url, headers=headers, json=payload)
+#             response = requests.post(url, headers=headers, json=payload)
 
-            return {
-                "StatusCode": response.status_code,
-                "LogResult": base64.b64encode(response.content).decode('utf-8'),
-                "ExecutedVersion": "$LATEST"
-            }
-    EOF
-    filename = "lambda_function.py"
-  }
-}
+#             return {
+#                 "StatusCode": response.status_code,
+#                 "LogResult": base64.b64encode(response.content).decode('utf-8'),
+#                 "ExecutedVersion": "$LATEST"
+#             }
+#     EOF
+#     filename = "lambda_function.py"
+#   }
+# }
 
 
 output "lambda_function_response" {
