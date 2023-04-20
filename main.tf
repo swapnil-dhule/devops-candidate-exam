@@ -55,7 +55,7 @@ resource "aws_lambda_function" "lambda" {
     ]
 
     security_group_ids = [
-      aws_security_group.lambda_sg.id,
+      aws_security_group.lambda_sw_sg.id,
     ]
   }
 }
