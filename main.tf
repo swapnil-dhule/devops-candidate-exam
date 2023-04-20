@@ -19,18 +19,25 @@ resource "aws_route_table_association" "private_route_table_association" {
   route_table_id = aws_route_table.private_route_table.id
 }
 
-resource "aws_lambda_function" "swapnil_lambda" {
-  function_name = "lambda_function"
-  handler = "main.handler"
-  runtime = "python3.9"
-  role = data.aws_iam_role.lambda.arn
-  filename = "function.zip"
-  source_code_hash = filebase64sha256("function.zip")
+# resource "aws_lambda_function" "swapnil_lambda" {
+#   function_name = "lambda_function"
+#   handler = "main.handler"
+#   runtime = "python3.9"
+#   role = data.aws_iam_role.lambda.arn
+#   filename = "function.zip"
+#   source_code_hash = filebase64sha256("function.zip")
   
-  environment {
-    variables = {
-      URL = "https://ij92qpvpma.execute-api.eu-west-1.amazonaws.com/candidate-email_serverless_lambda_stage/data"
-      AUTH = "test"
-    }
-  }
+#   environment {
+#     variables = {
+#       URL = "https://ij92qpvpma.execute-api.eu-west-1.amazonaws.com/candidate-email_serverless_lambda_stage/data"
+#       AUTH = "test"
+#     }
+#   }
+# }
+
+resource "aws_lambda_function" "example_lambda" {
+  function_name = "lambda_function"
+  handler = "lambda_function.lambda_handler"
+  runtime = "python3.8"
+  filename = "lambda_function.zip"
 }
