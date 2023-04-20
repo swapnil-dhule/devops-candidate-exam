@@ -19,6 +19,13 @@ resource "aws_route_table_association" "private_route_table_association" {
   route_table_id = aws_route_table.private_route_table.id
 }
 
+
+data "archive_file" "function_zip" {
+  type        = "zip"
+  source_file = "main.py"
+  output_path = "${path.module}/function.zip"
+}
+
 resource "aws_lambda_function" "example_lambda" {
   function_name = "example_lambda_function"
   handler = "main.handler"
@@ -33,10 +40,6 @@ resource "aws_lambda_function" "example_lambda" {
       AUTH = "test"
     }
   }
-}
 
-data "archive_file" "function_zip" {
-  type        = "zip"
-  source_file = "main.py"
-  output_path = "${path.module}/function.zip"
+  depends_on = [data.archive_file.function_zip]
 }
