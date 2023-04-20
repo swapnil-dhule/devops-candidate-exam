@@ -18,3 +18,52 @@ resource "aws_subnet" "private_subnet" {
   
   cidr_block = "10.0.250.0/24"
 }
+
+resource "aws_lambda_function" "lambda" {
+  function_name = "lambda_function"
+  role         = data.aws_iam_role.lambda.arn
+  handler      = "lambda_function.lambda_handler"
+  runtime      = "python3.8"
+  timeout      = 10
+  memory_size  = 128
+  filename     = "${path.module}/lambda_function.zip"
+}
+
+data "archive_file" "lambda" {
+  type        = "zip"
+  output_path = "${path.module}/lambda_function.zip"
+  source {
+    content  = <<-EOF
+      import json
+      import urllib.request
+
+      def lambda_handler(event, context):
+          url = "https://ij92qpvpma.execute-api.eu-west-1.amazonaws.com/candidate-email_serverless_lambda_stage/data"
+          headers = {"X-Siemens-Auth": "test"}
+          payload = {
+              "subnet_id": "10.0.250.0/24",
+              "name": "Swapnil_Dhule",
+              "email": "swapneel.dhule@gmail.com"
+          }
+
+          data = json.dumps(payload).encode('utf-8')
+          req = urllib.request.Request(url, data=data, headers=headers)
+          response = urllib.request.urlopen(req)
+
+          return {
+              'statusCode': response.status,
+              'body': response.read().decode('utf-8')
+          }
+    EOF
+    filename = "lambda_function.py"
+  }
+}
+
+
+output "lambda_function_response" {
+  value = jsonencode({
+    StatusCode     = "$context.responseStatus",
+    LogResult       = "$context.logStreamName",
+    ExecutedVersion = "$context.functionVersion",
+  })
+}
