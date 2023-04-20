@@ -62,6 +62,7 @@ resource "aws_route_table_association" "private_route_table_association" {
 
 resource "aws_security_group" "lambda_sg" {
   name_prefix = "lambda_sg_"
+  vpc_id      = data.aws_vpc.vpc.id
 
   ingress {
     from_port   = 0
