@@ -19,13 +19,6 @@ resource "aws_route_table_association" "private_route_table_association" {
   route_table_id = aws_route_table.private_route_table.id
 }
 
-
-# data "archive_file" "function_zip" {
-#   type        = "zip"
-#   source_file = "main.py"
-#   output_path = "${path.module}/function.zip"
-# }
-
 resource "aws_lambda_function" "swapnil_lambda" {
   function_name = "lambda_function"
   handler = "main.handler"
