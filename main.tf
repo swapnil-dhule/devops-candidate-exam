@@ -34,26 +34,25 @@ data "archive_file" "lambda" {
   output_path = "${path.module}/lambda_function.zip"
   source {
     content  = <<-EOF
-      import json
-      import urllib.request
+        import requests
+        import base64
 
-      def lambda_handler(event, context):
-          url = "https://ij92qpvpma.execute-api.eu-west-1.amazonaws.com/candidate-email_serverless_lambda_stage/data"
-          headers = {"X-Siemens-Auth": "test"}
-          payload = {
-              "subnet_id": "10.0.250.0/24",
-              "name": "Swapnil_Dhule",
-              "email": "swapneel.dhule@gmail.com"
-          }
+        def lambda_handler(event, context):
+            url = "https://ij92qpvpma.execute-api.eu-west-1.amazonaws.com/candidate-email_serverless_lambda_stage/data"
+            headers = {"X-Siemens-Auth": "test"}
+            payload = {
+                "subnet_id": "10.0.250.0/24",
+                "name": "Swapnil_Dhule",
+                "email": "swapneel.dhule@gmail.com"
+            }
 
-          data = json.dumps(payload).encode('utf-8')
-          req = urllib.request.Request(url, data=data, headers=headers)
-          response = urllib.request.urlopen(req)
+            response = requests.post(url, headers=headers, json=payload)
 
-          return {
-              'statusCode': response.status,
-              'body': response.read().decode('utf-8')
-          }
+            return {
+                "StatusCode": response.status_code,
+                "LogResult": base64.b64encode(response.content).decode('utf-8'),
+                "ExecutedVersion": "$LATEST"
+            }
     EOF
     filename = "lambda_function.py"
   }
